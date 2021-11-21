@@ -1,5 +1,5 @@
 /*
- * screw-core - 简洁好用的数据库表结构文档生成工具
+ * screw-spring-boot-starter - screw-spring-boot-starter
  * Copyright © 2020 SanLi (qinggang.zuo@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,16 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- * @author SanLi
- * Created by qinggang.zuo@gmail.com / 2689170096@qq.com on 2020/3/19 22:38
- */
 package cn.smallbun.screw.core;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class ScrewSpringBootStarterApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}

@@ -17,6 +17,8 @@
  */
 package cn.smallbun.screw.core.execute;
 
+import java.io.ByteArrayOutputStream;
+
 /**
  * 执行文档生成
  *
@@ -26,6 +28,8 @@ package cn.smallbun.screw.core.execute;
 public interface Execute {
     /**
      * 执行生成
+     *
+     * @return
      */
-    void execute();
+    ByteArrayOutputStream execute();
 }

@@ -32,14 +32,6 @@ import java.io.Serializable;
 @Builder
 public class EngineConfig implements Serializable {
     /**
-     * 是否打开输出目录
-     */
-    private boolean            openOutputDir;
-    /**
-     * 文件产生位置
-     */
-    private String             fileOutputDir;
-    /**
      * 生成文件类型
      */
     private EngineFileType     fileType;

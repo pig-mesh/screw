@@ -89,7 +89,7 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
      * @throws ProduceException ProduceException
      */
     @Override
-    public void produce(DataModel info, String docName) throws ProduceException {
+    public ByteArrayOutputStream produce(DataModel info, String docName) throws ProduceException {
         Assert.notNull(info, "DataModel can not be empty!");
         String path = getEngineConfig().getCustomTemplate();
         try {
@@ -107,15 +107,14 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
                     .getTemplate(getEngineConfig().getFileType().getTemplateNamePrefix()
                                  + freemarker.getSuffix());
             }
-            // create file
-            File file = getFile(docName);
             // writer freemarker
-            try (Writer out = new BufferedWriter(
-                new OutputStreamWriter(new FileOutputStream(file), DEFAULT_ENCODING))) {
+
+            try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    Writer out = new BufferedWriter(
+                        new OutputStreamWriter(outputStream, DEFAULT_ENCODING))) {
                 // process
                 template.process(info, out);
-                // open the output directory
-                openOutputDir();
+                return outputStream;
             }
         } catch (IOException | TemplateException e) {
             throw ExceptionUtils.mpe(e);

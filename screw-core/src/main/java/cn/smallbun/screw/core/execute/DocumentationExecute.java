@@ -25,6 +25,8 @@ import cn.smallbun.screw.core.metadata.model.DataModel;
 import cn.smallbun.screw.core.process.DataModelProcess;
 import cn.smallbun.screw.core.util.ExceptionUtils;
 
+import java.io.ByteArrayOutputStream;
+
 /**
  * 文档生成
  *
@@ -40,21 +42,25 @@ public class DocumentationExecute extends AbstractExecute {
     /**
      * 执行
      *
+     * @return
      * @throws BuilderException BuilderException
      */
     @Override
-    public void execute() throws BuilderException {
+    public ByteArrayOutputStream execute() throws BuilderException {
+        long start = System.currentTimeMillis();
+
         try {
-            long start = System.currentTimeMillis();
             //处理数据
             DataModel dataModel = new DataModelProcess(config).process();
             //产生文档
             TemplateEngine produce = new EngineFactory(config.getEngineConfig()).newInstance();
-            produce.produce(dataModel, getDocName(dataModel.getDatabase()));
-            logger.debug("database document generation complete time consuming:{}ms",
-                System.currentTimeMillis() - start);
+            return produce.produce(dataModel, getDocName(dataModel.getDatabase()));
+
         } catch (Exception e) {
             throw ExceptionUtils.mpe(e);
+        } finally {
+            logger.debug("database document generation complete time consuming:{}ms",
+                System.currentTimeMillis() - start);
         }
     }
 }

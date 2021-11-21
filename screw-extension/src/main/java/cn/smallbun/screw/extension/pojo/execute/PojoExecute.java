@@ -29,6 +29,7 @@ import cn.smallbun.screw.extension.pojo.process.PojoModelProcess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class PojoExecute implements Execute {
     }
 
     @Override
-    public void execute() {
+    public ByteArrayOutputStream execute() {
         try {
             long start = System.currentTimeMillis();
             //获取数据
@@ -87,6 +88,7 @@ public class PojoExecute implements Execute {
         } catch (Exception e) {
             throw ExceptionUtils.mpe(e);
         }
+        return null;
     }
 
     private String validate(PojoConfiguration config) {

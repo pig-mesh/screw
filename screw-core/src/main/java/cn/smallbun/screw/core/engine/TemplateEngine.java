@@ -20,6 +20,7 @@ package cn.smallbun.screw.core.engine;
 import cn.smallbun.screw.core.exception.ProduceException;
 import cn.smallbun.screw.core.metadata.model.DataModel;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 /**
@@ -29,6 +30,7 @@ import java.io.Serializable;
  * Created by qinggang.zuo@gmail.com / 2689170096@qq.com on 2020/3/17 21:47
  */
 public interface TemplateEngine extends Serializable {
+
     /**
      * 生成文档
      *
@@ -36,6 +38,6 @@ public interface TemplateEngine extends Serializable {
      * @param docName {@link String}
      * @throws ProduceException ProduceException
      */
-    void produce(DataModel info, String docName) throws ProduceException;
+    ByteArrayOutputStream produce(DataModel info, String docName) throws ProduceException;
 
 }

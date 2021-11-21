@@ -31,7 +31,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.log.NullLogChute;
 
 import java.io.BufferedWriter;
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
@@ -86,10 +86,11 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
      * 生成文档
      *
      * @param info {@link DataModel}
+     * @return
      * @throws ProduceException ProduceException
      */
     @Override
-    public void produce(DataModel info, String docName) throws ProduceException {
+    public ByteArrayOutputStream produce(DataModel info, String docName) throws ProduceException {
         Assert.notNull(info, "DataModel can not be empty!");
         Template template;
         try {
@@ -108,16 +109,16 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
                         DEFAULT_ENCODING);
             }
             // output
-            try (FileOutputStream outStream = new FileOutputStream(getFile(docName));
-                    OutputStreamWriter writer = new OutputStreamWriter(outStream, DEFAULT_ENCODING);
+            try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    OutputStreamWriter writer = new OutputStreamWriter(outputStream,
+                        DEFAULT_ENCODING);
                     BufferedWriter sw = new BufferedWriter(writer)) {
                 //put data
                 VelocityContext context = new VelocityContext();
                 context.put(DATA, info);
                 //generate
                 template.merge(context, sw);
-                // open the output directory
-                openOutputDir();
+                return outputStream;
             }
         } catch (IOException e) {
             throw ExceptionUtils.mpe(e);

@@ -45,27 +45,39 @@ public class Screw {
      * @return
      */
     public ByteArrayOutputStream documentGeneration(DataSource dataSource) {
+        return this.documentGeneration(dataSource, screwProperties);
+    }
+
+    /**
+     * 生成文档 （文件形式）
+     *
+     * @param dataSource      目标数据源信息
+     * @param screwProperties 配置信息
+     * @return
+     */
+    public ByteArrayOutputStream documentGeneration(DataSource dataSource, ScrewProperties screwProperties) {
         //总配置
         cn.smallbun.screw.core.Configuration config = Configuration.builder()
-            //组织
-            .organization(screwProperties.getOrganization())
-            //url
-            .organizationUrl(screwProperties.getOrganizationUrl())
-            //标题
-            .title(screwProperties.getTitle())
-            //版本
-            .version(screwProperties.getVersion())
-            //描述
-            .description(screwProperties.getDescription())
-            //数据源
-            .dataSource(dataSource)
-            //引擎模板配置
-            .engineConfig(getEngineConfig())
-            //数据处理配置
-            .produceConfig(getProcessConfig()).build();
+                //组织
+                .organization(screwProperties.getOrganization())
+                //url
+                .organizationUrl(screwProperties.getOrganizationUrl())
+                //标题
+                .title(screwProperties.getTitle())
+                //版本
+                .version(screwProperties.getVersion())
+                //描述
+                .description(screwProperties.getDescription())
+                //数据源
+                .dataSource(dataSource)
+                //引擎模板配置
+                .engineConfig(getEngineConfig())
+                //数据处理配置
+                .produceConfig(getProcessConfig()).build();
         //生成文档
         return new DocumentationExecute(config).execute();
     }
+
 
     /**
      * 引擎模板配置
@@ -74,14 +86,14 @@ public class Screw {
      */
     private EngineConfig getEngineConfig() {
         return EngineConfig.builder()
-            //文件类型
-            .fileType(screwProperties.getFileType())
-            //生成模板实现
-            .produceType(screwProperties.getProduceType())
-            //自定义模板位置
-            .customTemplate(screwProperties.getTemplate())
-            //文件名称
-            .fileName(screwProperties.getFileName()).build();
+                //文件类型
+                .fileType(screwProperties.getFileType())
+                //生成模板实现
+                .produceType(screwProperties.getProduceType())
+                //自定义模板位置
+                .customTemplate(screwProperties.getTemplate())
+                //文件名称
+                .fileName(screwProperties.getFileName()).build();
     }
 
     /**
@@ -91,18 +103,18 @@ public class Screw {
      */
     private ProcessConfig getProcessConfig() {
         return ProcessConfig.builder()
-            //忽略表名
-            .ignoreTableName(screwProperties.getIgnoreTableName())
-            //忽略表前缀
-            .ignoreTablePrefix(screwProperties.getIgnoreTablePrefix())
-            //忽略表后缀
-            .ignoreTableSuffix(screwProperties.getIgnoreTableSuffix())
-            //指定生成表名
-            .designatedTableName(screwProperties.getDesignatedTableName())
-            //指定生成表前缀
-            .designatedTablePrefix(screwProperties.getDesignatedTablePrefix())
-            //指定生成表后缀
-            .designatedTableSuffix(screwProperties.getDesignatedTableSuffix()).build();
+                //忽略表名
+                .ignoreTableName(screwProperties.getIgnoreTableName())
+                //忽略表前缀
+                .ignoreTablePrefix(screwProperties.getIgnoreTablePrefix())
+                //忽略表后缀
+                .ignoreTableSuffix(screwProperties.getIgnoreTableSuffix())
+                //指定生成表名
+                .designatedTableName(screwProperties.getDesignatedTableName())
+                //指定生成表前缀
+                .designatedTablePrefix(screwProperties.getDesignatedTablePrefix())
+                //指定生成表后缀
+                .designatedTableSuffix(screwProperties.getDesignatedTableSuffix()).build();
     }
 
 }

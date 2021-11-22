@@ -7,7 +7,7 @@
     <groupId>com.pig4cloud.screw</groupId>
     <artifactId>screw</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <inceptionYear>2020</inceptionYear>
     <name>screw</name>
     <description>简洁好用的数据库表结构文档生成工具</description>

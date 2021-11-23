@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.springboot.screw</groupId>
+        <groupId>io.springboot.plugin</groupId>
         <artifactId>screw</artifactId>
         <version>0.0.1</version>
         <relativePath>../pom.xml</relativePath>
@@ -25,7 +25,7 @@
 
         <!--项目核心包-->
         <dependency>
-            <groupId>io.springboot.screw</groupId>
+            <groupId>io.springboot.plugin</groupId>
             <artifactId>screw-core</artifactId>
             <version>${project.version}</version>
         </dependency>

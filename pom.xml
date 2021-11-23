@@ -4,20 +4,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.pig4cloud.screw</groupId>
+    <groupId>io.springboot.screw</groupId>
     <artifactId>screw</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.2</version>
+    <version>0.0.1</version>
     <inceptionYear>2020</inceptionYear>
     <name>screw</name>
     <description>简洁好用的数据库表结构文档生成工具</description>
     <url>http://www.screw.smallbun.cn</url>
     <!--scm-->
     <scm>
-        <connection>scm:git:git@github.com:pingfangushi/screw.git</connection>
-        <developerConnection>scm:git:git@github.com:pingfangushi/screw.git
+        <connection>scm:git:git@github.com:pig-mesh/screw.git</connection>
+        <developerConnection>scm:git:git@github.com:pig-mesh/screw.git
         </developerConnection>
-        <url>http://github.com/pingfangushi/screw/tree/master</url>
+        <url>https://github.com/pig-mesh/screw</url>
     </scm>
     <!--开发人员信息-->
     <developers>

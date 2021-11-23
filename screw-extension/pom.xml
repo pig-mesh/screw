@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>screw</artifactId>
-        <groupId>com.pig4cloud.screw</groupId>
-        <version>0.0.2</version>
+        <groupId>io.springboot.screw</groupId>
+        <version>0.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,7 +13,7 @@
     <dependencies>
         <!--项目核心包-->
         <dependency>
-            <groupId>com.pig4cloud.screw</groupId>
+            <groupId>io.springboot.screw</groupId>
             <artifactId>screw-core</artifactId>
             <version>${project.version}</version>
         </dependency>

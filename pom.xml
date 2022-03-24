@@ -7,7 +7,7 @@
    <groupId>io.springboot.plugin</groupId>
     <artifactId>screw</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <inceptionYear>2020</inceptionYear>
     <name>screw</name>
     <description>简洁好用的数据库表结构文档生成工具</description>
@@ -52,6 +52,8 @@
         </argline>
         <junit.jupiter.version>5.7.0</junit.jupiter.version>
         <junit.version>4.13.1</junit.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <commons-logging.version>1.2</commons-logging.version>
         <commons-dbcp2.version>2.7.0</commons-dbcp2.version>
         <HikariCP.version>3.4.5</HikariCP.version>

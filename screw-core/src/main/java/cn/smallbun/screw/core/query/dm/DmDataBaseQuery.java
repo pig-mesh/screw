@@ -17,19 +17,6 @@
  */
 package cn.smallbun.screw.core.query.dm;
 
-import static cn.smallbun.screw.core.constant.DefaultConstants.PERCENT_SIGN;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
-
-import javax.sql.DataSource;
-
 import cn.smallbun.screw.core.exception.QueryException;
 import cn.smallbun.screw.core.mapping.Mapping;
 import cn.smallbun.screw.core.metadata.Column;
@@ -44,6 +31,19 @@ import cn.smallbun.screw.core.util.Assert;
 import cn.smallbun.screw.core.util.CollectionUtils;
 import cn.smallbun.screw.core.util.ExceptionUtils;
 import cn.smallbun.screw.core.util.JdbcUtils;
+import lombok.SneakyThrows;
+
+import javax.sql.DataSource;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
+
+import static cn.smallbun.screw.core.constant.DefaultConstants.PERCENT_SIGN;
 
 /**
  * 达梦数据库查询
@@ -53,58 +53,14 @@ import cn.smallbun.screw.core.util.JdbcUtils;
  */
 @SuppressWarnings("serial")
 public class DmDataBaseQuery extends AbstractDatabaseQuery {
-    private final ConcurrentMap<String, List<DmTableModel>> tablesMap            = new ConcurrentHashMap<>();
-    private static final String                             DM_QUERY_TABLE_SQL   = ""
-                                                                                   + "select                                "
-                                                                                   + "    ut.table_name TABLE_NAME,         "
-                                                                                   + "    utc.comments COMMENTS             "
-                                                                                   + "from                                  "
-                                                                                   + "        user_tables ut                "
-                                                                                   + "left join USER_TAB_COMMENTS utc       "
-                                                                                   + "on                                    "
-                                                                                   + "        ut.table_name=utc.table_name  ";
+    private final ConcurrentMap<String, List<DmTableModel>> tablesMap = new ConcurrentHashMap<>();
+    private static final String DM_QUERY_TABLE_SQL = "" + "select                                " + "    ut.table_name TABLE_NAME,         " + "    utc.comments COMMENTS             " + "from                                  " + "        user_tables ut                " + "left join USER_TAB_COMMENTS utc       " + "on                                    " + "        ut.table_name=utc.table_name  ";
 
-    private static final String                             DM_QUERY_COLUMNS_SQL = ""
-                                                                                   + "select         "
-                                                                                   + "        ut.table_name TABLE_NAME    ,    "
-                                                                                   + "        uc.column_name COLUMN_NAME  ,    "
-                                                                                   //+ "        case uc.data_type when 'INT' then uc.data_type when 'CLOB' then uc.data_type when 'BLOB' then uc.data_type when 'INTEGER' then uc.data_type else  concat(concat(concat(uc.data_type, '('), uc.data_length), ')')  end case AS COLUMN_TYPE     ,      "
-                                                                                   + "        case uc.data_type when 'CLOB' then uc.data_type when 'BLOB' then uc.data_type  else  concat(concat(concat(uc.data_type, '('), uc.data_length), ')')  end case AS COLUMN_TYPE     ,      "
-                                                                                   + "        uc.data_length COLUMN_LENGTH  ,  "
-                                                                                   + "        uc.DATA_PRECISION  DATA_PRECISION,  "
-                                                                                   + "        uc.DATA_SCALE DECIMAL_DIGITS,  "
-                                                                                   + "        case uc.NULLABLE when 'Y' then '1' else '0' end case NULLABLE,"
-                                                                                   + "        uc.DATA_DEFAULT COLUMN_DEF,  "
-                                                                                   + "        ucc.comments REMARKS          "
-                                                                                   + "from                                     "
-                                                                                   + "        user_tables ut                     "
-                                                                                   + "left join USER_TAB_COMMENTS utc            "
-                                                                                   + "on                                         "
-                                                                                   + "        ut.table_name=utc.table_name       "
-                                                                                   + "left join user_tab_columns uc              "
-                                                                                   + "on                                         "
-                                                                                   + "        ut.table_name=uc.table_name        "
-                                                                                   + "left join user_col_comments ucc            "
-                                                                                   + "on                                         "
-                                                                                   + "        uc.table_name =ucc.table_name      "
-                                                                                   + "    and uc.column_name=ucc.column_name  "
-                                                                                   + "where 1=1  ";
+    private static final String DM_QUERY_COLUMNS_SQL = "" + "select         " + "        ut.table_name TABLE_NAME    ,    " + "        uc.column_name COLUMN_NAME  ,    "
+            //+ "        case uc.data_type when 'INT' then uc.data_type when 'CLOB' then uc.data_type when 'BLOB' then uc.data_type when 'INTEGER' then uc.data_type else  concat(concat(concat(uc.data_type, '('), uc.data_length), ')')  end case AS COLUMN_TYPE     ,      "
+            + "        case uc.data_type when 'CLOB' then uc.data_type when 'BLOB' then uc.data_type  else  concat(concat(concat(uc.data_type, '('), uc.data_length), ')')  end case AS COLUMN_TYPE     ,      " + "        uc.data_length COLUMN_LENGTH  ,  " + "        uc.DATA_PRECISION  DATA_PRECISION,  " + "        uc.DATA_SCALE DECIMAL_DIGITS,  " + "        case uc.NULLABLE when 'Y' then '1' else '0' end case NULLABLE," + "        uc.DATA_DEFAULT COLUMN_DEF,  " + "        ucc.comments REMARKS          " + "from                                     " + "        user_tables ut                     " + "left join USER_TAB_COMMENTS utc            " + "on                                         " + "        ut.table_name=utc.table_name       " + "left join user_tab_columns uc              " + "on                                         " + "        ut.table_name=uc.table_name        " + "left join user_col_comments ucc            " + "on                                         " + "        uc.table_name =ucc.table_name      " + "    and uc.column_name=ucc.column_name  " + "where 1=1  ";
 
-    private static final String                             DM_QUERY_PK_SQL      = "" + "SELECT "
-                                                                                   + "C.OWNER AS TABLE_SCHEM, "
-                                                                                   + "C.TABLE_NAME          , "
-                                                                                   + "C.COLUMN_NAME         , "
-                                                                                   + "C.POSITION        AS KEY_SEQ , "
-                                                                                   + "C.CONSTRAINT_NAME AS PK_NAME "
-                                                                                   + "FROM "
-                                                                                   + "        ALL_CONS_COLUMNS C, "
-                                                                                   + "        ALL_CONSTRAINTS K "
-                                                                                   + "WHERE "
-                                                                                   + "        K.CONSTRAINT_TYPE = 'P' "
-                                                                                   + "    AND K.OWNER           = '%s' "
-                                                                                   + "    AND K.CONSTRAINT_NAME = C.CONSTRAINT_NAME "
-                                                                                   + "    AND K.TABLE_NAME      = C.TABLE_NAME "
-                                                                                   + "    AND K.OWNER           = C.OWNER ";
+    private static final String DM_QUERY_PK_SQL = "" + "SELECT " + "C.OWNER AS TABLE_SCHEM, " + "C.TABLE_NAME          , " + "C.COLUMN_NAME         , " + "C.POSITION        AS KEY_SEQ , " + "C.CONSTRAINT_NAME AS PK_NAME " + "FROM " + "        ALL_CONS_COLUMNS C, " + "        ALL_CONSTRAINTS K " + "WHERE " + "        K.CONSTRAINT_TYPE = 'P' " + "    AND K.OWNER           = '%s' " + "    AND K.CONSTRAINT_NAME = C.CONSTRAINT_NAME " + "    AND K.TABLE_NAME      = C.TABLE_NAME " + "    AND K.OWNER           = C.OWNER ";
 
     /**
      * 构造函数
@@ -134,9 +90,11 @@ public class DmDataBaseQuery extends AbstractDatabaseQuery {
      * @return {@link String} 达梦数据库的schema信息
      */
     @Override
+    @SneakyThrows
     public String getSchema() throws QueryException {
-        return null;
+        return getDataSource().getConnection().getSchema();
     }
+
 
     /**
      * 获取达梦数据库的schema
@@ -167,8 +125,7 @@ public class DmDataBaseQuery extends AbstractDatabaseQuery {
         ResultSet resultSet = null;
         try {
             //查询
-            resultSet = getMetaData().getTables(getSchema(), getSchema(), PERCENT_SIGN,
-                new String[] { "TABLE" });
+            resultSet = getMetaData().getTables(getSchema(), getSchema(), PERCENT_SIGN, new String[]{"TABLE"});
             //映射
             List<DmTableModel> list = Mapping.convertList(resultSet, DmTableModel.class);
 
@@ -178,9 +135,7 @@ public class DmDataBaseQuery extends AbstractDatabaseQuery {
             //处理备注信息
             list.forEach((DmTableModel model) -> {
                 //备注
-                inquires.stream()
-                    .filter(inquire -> model.getTableName().equals(inquire.getTableName()))
-                    .forEachOrdered(inquire -> model.setRemarks(inquire.getRemarks()));
+                inquires.stream().filter(inquire -> model.getTableName().equals(inquire.getTableName())).forEachOrdered(inquire -> model.setRemarks(inquire.getRemarks()));
             });
             if (!list.isEmpty()) {
                 tablesMap.put("AllTable", list);
@@ -228,14 +183,12 @@ public class DmDataBaseQuery extends AbstractDatabaseQuery {
                 } else {
                     //查询单表的列信息
                     String singleTableSql = DM_QUERY_COLUMNS_SQL.concat(" and ut.table_name='%s'");
-                    resultSet = prepareStatement(String.format(singleTableSql, table))
-                        .executeQuery();
+                    resultSet = prepareStatement(String.format(singleTableSql, table)).executeQuery();
                 }
 
                 List<DmColumnModel> inquires = Mapping.convertList(resultSet, DmColumnModel.class);
                 //这里利用lambda表达式将多行列信息按table name 进行归类，并放入缓存
-                tableNames.forEach(name -> columnsCaching.put(name, inquires.stream()
-                    .filter(i -> i.getTableName().equals(name)).collect(Collectors.toList())));
+                tableNames.forEach(name -> columnsCaching.put(name, inquires.stream().filter(i -> i.getTableName().equals(name)).collect(Collectors.toList())));
                 resultList = inquires;
             }
             return resultList;

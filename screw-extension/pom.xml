@@ -5,11 +5,15 @@
     <parent>
         <artifactId>screw</artifactId>
        <groupId>io.springboot.plugin</groupId>
-        <version>0.0.1</version>
+        <version>0.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>screw-extension</artifactId>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
     <dependencies>
         <!--项目核心包-->
         <dependency>

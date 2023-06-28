@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.springboot.plugin</groupId>
         <artifactId>screw</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -14,12 +14,17 @@
     <name>screw-spring-boot-starter</name>
     <description>screw-spring-boot-starter</description>
 
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
     <dependencies>
         <!-- mica-auto-->
         <dependency>
             <groupId>net.dreamlu</groupId>
             <artifactId>mica-auto</artifactId>
-            <version>2.2.0</version>
+            <version>3.1.1</version>
             <scope>provided</scope>
         </dependency>
 
@@ -51,7 +56,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.6.0</version>
+                <version>3.1.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

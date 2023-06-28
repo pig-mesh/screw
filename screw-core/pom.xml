@@ -5,13 +5,17 @@
     <parent>
        <groupId>io.springboot.plugin</groupId>
         <artifactId>screw</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>screw-core</artifactId>
+    <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
     <dependencies>
         <!--commons-lang-->
         <dependency>

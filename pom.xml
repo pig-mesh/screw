@@ -7,7 +7,7 @@
    <groupId>io.springboot.plugin</groupId>
     <artifactId>screw</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <inceptionYear>2020</inceptionYear>
     <name>screw</name>
     <description>简洁好用的数据库表结构文档生成工具</description>
@@ -57,7 +57,7 @@
         <commons-logging.version>1.2</commons-logging.version>
         <commons-dbcp2.version>2.7.0</commons-dbcp2.version>
         <HikariCP.version>3.4.5</HikariCP.version>
-        <lombok.version>1.18.16</lombok.version>
+        <lombok.version>1.18.28</lombok.version>
         <freemarker.version>2.3.30</freemarker.version>
         <velocity.version>1.7</velocity.version>
         <velocity-tools.version>2.0</velocity-tools.version>
@@ -305,16 +305,6 @@
             <id>release</id>
             <build>
                 <plugins>
-                    <!--compiler-->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${maven-compiler-plugin.version}</version>
-                        <configuration>
-                            <source>8</source>
-                            <target>8</target>
-                        </configuration>
-                    </plugin>
                     <!-- Source -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -333,14 +323,14 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.9.1</version>
+                        <version>3.3.2</version>
                         <configuration>
                             <show>private</show>
                             <nohelp>true</nohelp>
                             <charset>UTF-8</charset>
                             <encoding>UTF-8</encoding>
                             <docencoding>UTF-8</docencoding>
-                            <additionalparam>-Xdoclint:none</additionalparam>
+                            <doclint>none</doclint>
                             <detectJavaApiLink>false</detectJavaApiLink>
                         </configuration>
                         <executions>
@@ -356,20 +346,27 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
+                                <id>sign-artifacts</id>
                                 <phase>verify</phase>
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.8</version>
+                        <version>1.6.13</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>sonatype</serverId>
@@ -380,13 +377,11 @@
                 </plugins>
             </build>
             <distributionManagement>
-                <snapshotRepository>
-                    <id>sonatype</id>
-                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-                </snapshotRepository>
                 <repository>
                     <id>sonatype</id>
-                    <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                    <url>
+                        https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/
+                    </url>
                 </repository>
             </distributionManagement>
         </profile>

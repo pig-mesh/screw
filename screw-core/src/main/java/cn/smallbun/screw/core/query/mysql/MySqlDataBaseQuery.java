@@ -91,8 +91,7 @@ public class MySqlDataBaseQuery extends AbstractDatabaseQuery {
         } catch (SQLException e) {
             throw ExceptionUtils.mpe(e);
         } finally {
-            JdbcUtils.close(resultSet);
-        }
+            JdbcUtils.close(resultSet, this.connection);        }
 
     }
 
@@ -159,7 +158,7 @@ public class MySqlDataBaseQuery extends AbstractDatabaseQuery {
         } catch (SQLException e) {
             throw ExceptionUtils.mpe(e);
         } finally {
-            JdbcUtils.close(resultSet);
+            JdbcUtils.close(resultSet, this.connection);
         }
     }
 
@@ -216,7 +215,6 @@ public class MySqlDataBaseQuery extends AbstractDatabaseQuery {
         } catch (SQLException e) {
             throw new QueryException(e);
         } finally {
-            JdbcUtils.close(resultSet);
-        }
+            JdbcUtils.close(resultSet, this.connection);        }
     }
 }

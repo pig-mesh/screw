@@ -31,5 +31,5 @@ public interface Execute {
      *
      * @return
      */
-    ByteArrayOutputStream execute();
+    ByteArrayOutputStream execute(String dsName);
 }

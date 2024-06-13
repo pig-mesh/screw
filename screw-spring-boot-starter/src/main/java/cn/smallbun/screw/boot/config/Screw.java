@@ -44,8 +44,8 @@ public class Screw {
      * @param dataSource 目标数据源信息
      * @return
      */
-    public ByteArrayOutputStream documentGeneration(DataSource dataSource) {
-        return this.documentGeneration(dataSource, screwProperties);
+    public ByteArrayOutputStream documentGeneration(String dsName,DataSource dataSource) {
+        return this.documentGeneration(dsName,dataSource, screwProperties);
     }
 
     /**
@@ -55,7 +55,7 @@ public class Screw {
      * @param screwProperties 配置信息
      * @return
      */
-    public ByteArrayOutputStream documentGeneration(DataSource dataSource, ScrewProperties screwProperties) {
+    public ByteArrayOutputStream documentGeneration(String dsName,DataSource dataSource, ScrewProperties screwProperties) {
         //总配置
         cn.smallbun.screw.core.Configuration config = Configuration.builder()
                 //组织
@@ -75,7 +75,7 @@ public class Screw {
                 //数据处理配置
                 .produceConfig(getProcessConfig()).build();
         //生成文档
-        return new DocumentationExecute(config).execute();
+        return new DocumentationExecute(config).execute(dsName);
     }
 
 

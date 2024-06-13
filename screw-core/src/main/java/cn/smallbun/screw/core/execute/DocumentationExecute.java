@@ -46,12 +46,12 @@ public class DocumentationExecute extends AbstractExecute {
      * @throws BuilderException BuilderException
      */
     @Override
-    public ByteArrayOutputStream execute() throws BuilderException {
+    public ByteArrayOutputStream execute(String dsName) throws BuilderException {
         long start = System.currentTimeMillis();
 
         try {
             //处理数据
-            DataModel dataModel = new DataModelProcess(config).process();
+            DataModel dataModel = new DataModelProcess(config).process(dsName);
             //产生文档
             TemplateEngine produce = new EngineFactory(config.getEngineConfig()).newInstance();
             return produce.produce(dataModel, getDocName(dataModel.getDatabase()));

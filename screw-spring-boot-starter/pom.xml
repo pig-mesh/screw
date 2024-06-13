@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.springboot.plugin</groupId>
+        <groupId>group.springframework.plugin</groupId>
         <artifactId>screw</artifactId>
-        <version>0.0.3</version>
+        <version>0.0.4</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -30,7 +30,7 @@
 
         <!--项目核心包-->
         <dependency>
-            <groupId>io.springboot.plugin</groupId>
+            <groupId>group.springframework.plugin</groupId>
             <artifactId>screw-core</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -56,7 +56,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>3.1.1</version>
+                <version>3.3.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

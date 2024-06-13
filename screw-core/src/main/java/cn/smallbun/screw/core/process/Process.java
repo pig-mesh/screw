@@ -34,5 +34,5 @@ public interface Process extends Serializable {
      * @return {@link DataModel}
      * @throws Exception Exception
      */
-    DataModel process() throws Exception;
+    DataModel process(String dsName) throws Exception;
 }

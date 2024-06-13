@@ -4,10 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-   <groupId>io.springboot.plugin</groupId>
+   <groupId>group.springframework.plugin</groupId>
     <artifactId>screw</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <inceptionYear>2020</inceptionYear>
     <name>screw</name>
     <description>简洁好用的数据库表结构文档生成工具</description>
@@ -57,7 +57,7 @@
         <commons-logging.version>1.2</commons-logging.version>
         <commons-dbcp2.version>2.7.0</commons-dbcp2.version>
         <HikariCP.version>3.4.5</HikariCP.version>
-        <lombok.version>1.18.28</lombok.version>
+        <lombok.version>1.18.32</lombok.version>
         <freemarker.version>2.3.30</freemarker.version>
         <velocity.version>1.7</velocity.version>
         <velocity-tools.version>2.0</velocity-tools.version>
@@ -296,7 +296,6 @@
     <!--模块-->
     <modules>
         <module>screw-core</module>
-        <module>screw-extension</module>
         <module>screw-spring-boot-starter</module>
     </modules>
 
@@ -370,7 +369,7 @@
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>sonatype</serverId>
-                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
@@ -380,7 +379,7 @@
                 <repository>
                     <id>sonatype</id>
                     <url>
-                        https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/
+                        https://oss.sonatype.org/service/local/staging/deploy/maven2/
                     </url>
                 </repository>
             </distributionManagement>

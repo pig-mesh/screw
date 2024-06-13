@@ -30,7 +30,9 @@ import cn.smallbun.screw.core.query.DatabaseQueryFactory;
 import cn.smallbun.screw.core.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static cn.smallbun.screw.core.constant.DefaultConstants.*;
@@ -52,15 +54,22 @@ public class DataModelProcess extends AbstractProcess {
         super(configuration);
     }
 
+    private static Map<String,DatabaseQuery> databaseQueryMap = new HashMap<>();
+
     /**
      * 处理
      *
      * @return {@link DataModel}
      */
     @Override
-    public DataModel process() {
+    public DataModel process(String dsName) {
         //获取query对象
-        DatabaseQuery query = new DatabaseQueryFactory(config.getDataSource()).newInstance();
+        DatabaseQuery databaseQuery = databaseQueryMap.get(dsName);
+
+        if (databaseQuery == null) {
+            databaseQuery = new DatabaseQueryFactory(config.getDataSource()).newInstance();
+            databaseQueryMap.put(dsName, databaseQuery);
+        }
         DataModel model = new DataModel();
         //Title
         model.setTitle(config.getTitle());
@@ -76,21 +85,21 @@ public class DataModelProcess extends AbstractProcess {
         /*查询操作开始*/
         long start = System.currentTimeMillis();
         //获取数据库
-        Database database = query.getDataBase();
+        Database database = databaseQuery.getDataBase();
         logger.debug("query the database time consuming:{}ms",
             (System.currentTimeMillis() - start));
         model.setDatabase(database.getDatabase());
         start = System.currentTimeMillis();
         //获取全部表
-        List<? extends Table> tables = query.getTables();
+        List<? extends Table> tables = databaseQuery.getTables();
         logger.debug("query the table time consuming:{}ms", (System.currentTimeMillis() - start));
         //获取全部列
         start = System.currentTimeMillis();
-        List<? extends Column> columns = query.getTableColumns();
+        List<? extends Column> columns = databaseQuery.getTableColumns();
         logger.debug("query the column time consuming:{}ms", (System.currentTimeMillis() - start));
         //获取主键
         start = System.currentTimeMillis();
-        List<? extends PrimaryKey> primaryKeys = query.getPrimaryKeys();
+        List<? extends PrimaryKey> primaryKeys = databaseQuery.getPrimaryKeys();
         logger.debug("query the primary key time consuming:{}ms",
             (System.currentTimeMillis() - start));
         /*查询操作结束*/

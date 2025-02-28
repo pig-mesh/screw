@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>group.springframework.plugin</groupId>
+        <groupId>io.github.pig-mesh.plugin</groupId>
         <artifactId>screw</artifactId>
-        <version>0.0.6</version>
+        <version>0.0.7</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -30,7 +30,7 @@
 
         <!--项目核心包-->
         <dependency>
-            <groupId>group.springframework.plugin</groupId>
+            <groupId>io.github.pig-mesh.plugin</groupId>
             <artifactId>screw-core</artifactId>
             <version>${project.version}</version>
         </dependency>

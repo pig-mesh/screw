@@ -54,13 +54,47 @@ import static cn.smallbun.screw.core.constant.DefaultConstants.PERCENT_SIGN;
 @SuppressWarnings("serial")
 public class DmDataBaseQuery extends AbstractDatabaseQuery {
     private final ConcurrentMap<String, List<DmTableModel>> tablesMap = new ConcurrentHashMap<>();
-    private static final String DM_QUERY_TABLE_SQL = "" + "select                                " + "    ut.table_name TABLE_NAME,         " + "    utc.comments COMMENTS             " + "from                                  " + "        user_tables ut                " + "left join USER_TAB_COMMENTS utc       " + "on                                    " + "        ut.table_name=utc.table_name  ";
 
-    private static final String DM_QUERY_COLUMNS_SQL = "" + "select         " + "        ut.table_name TABLE_NAME    ,    " + "        uc.column_name COLUMN_NAME  ,    "
-            //+ "        case uc.data_type when 'INT' then uc.data_type when 'CLOB' then uc.data_type when 'BLOB' then uc.data_type when 'INTEGER' then uc.data_type else  concat(concat(concat(uc.data_type, '('), uc.data_length), ')')  end case AS COLUMN_TYPE     ,      "
-            + "        case uc.data_type when 'CLOB' then uc.data_type when 'BLOB' then uc.data_type  else  concat(concat(concat(uc.data_type, '('), uc.data_length), ')')  end case AS COLUMN_TYPE     ,      " + "        uc.data_length COLUMN_LENGTH  ,  " + "        uc.DATA_PRECISION  DATA_PRECISION,  " + "        uc.DATA_SCALE DECIMAL_DIGITS,  " + "        case uc.NULLABLE when 'Y' then '1' else '0' end case NULLABLE," + "        uc.DATA_DEFAULT COLUMN_DEF,  " + "        ucc.comments REMARKS          " + "from                                     " + "        user_tables ut                     " + "left join USER_TAB_COMMENTS utc            " + "on                                         " + "        ut.table_name=utc.table_name       " + "left join user_tab_columns uc              " + "on                                         " + "        ut.table_name=uc.table_name        " + "left join user_col_comments ucc            " + "on                                         " + "        uc.table_name =ucc.table_name      " + "    and uc.column_name=ucc.column_name  " + "where 1=1  ";
+    private static final String DM_QUERY_TABLE_SQL =
+            "select ut.table_name TABLE_NAME, utc.comments COMMENTS " +
+                    "from user_tables ut " +
+                    "left join USER_TAB_COMMENTS utc on ut.table_name = utc.table_name";
 
-    private static final String DM_QUERY_PK_SQL = "" + "SELECT " + "C.OWNER AS TABLE_SCHEM, " + "C.TABLE_NAME          , " + "C.COLUMN_NAME         , " + "C.POSITION        AS KEY_SEQ , " + "C.CONSTRAINT_NAME AS PK_NAME " + "FROM " + "        ALL_CONS_COLUMNS C, " + "        ALL_CONSTRAINTS K " + "WHERE " + "        K.CONSTRAINT_TYPE = 'P' " + "    AND K.OWNER           = '%s' " + "    AND K.CONSTRAINT_NAME = C.CONSTRAINT_NAME " + "    AND K.TABLE_NAME      = C.TABLE_NAME " + "    AND K.OWNER           = C.OWNER ";
+    private static final String DM_QUERY_COLUMNS_SQL =
+            "SELECT\n" +
+                    "    ut.table_name AS TABLE_NAME,\n" +
+                    "    uc.column_name AS COLUMN_NAME,\n" +
+                    "    CASE uc.data_type\n" +
+                    "        WHEN 'CLOB' THEN\n" +
+                    "            uc.data_type\n" +
+                    "        WHEN 'BLOB' THEN\n" +
+                    "            uc.data_type\n" +
+                    "        ELSE\n" +
+                    "            CONCAT(CONCAT(CONCAT(uc.data_type, '('), uc.data_length), ')')\n" +
+                    "    END AS COLUMN_TYPE,\n" +
+                    "    uc.data_length AS COLUMN_LENGTH,\n" +
+                    "    uc.DATA_PRECISION AS DATA_PRECISION,\n" +
+                    "    uc.DATA_SCALE AS DECIMAL_DIGITS,\n" +
+                    "    CASE uc.NULLABLE\n" +
+                    "        WHEN 'Y' THEN\n" +
+                    "            '1'\n" +
+                    "        ELSE\n" +
+                    "            '0'\n" +
+                    "    END AS NULLABLE,\n" +
+                    "    uc.DATA_DEFAULT AS COLUMN_DEF,\n" +
+                    "    ucc.comments AS REMARKS\n" +
+                    "FROM\n" +
+                    "    all_tables ut\n" +
+                    "    LEFT JOIN all_tab_comments utc ON ut.table_name = utc.table_name AND ut.owner = utc.owner\n" +
+                    "    LEFT JOIN all_tab_columns uc ON ut.owner = uc.owner AND ut.table_name = uc.table_name\n" +
+                    "    LEFT JOIN all_col_comments ucc ON uc.owner = ucc.owner AND uc.table_name = ucc.table_name AND uc.column_name = ucc.column_name\n" +
+                    "WHERE 1 = 1 ";
+
+    private static final String DM_QUERY_PK_SQL =
+            "SELECT C.OWNER AS TABLE_SCHEM, C.TABLE_NAME, C.COLUMN_NAME, C.POSITION AS KEY_SEQ, C.CONSTRAINT_NAME AS PK_NAME " +
+                    "FROM ALL_CONS_COLUMNS C, ALL_CONSTRAINTS K " +
+                    "WHERE K.CONSTRAINT_TYPE = 'P' AND K.OWNER = '%s' AND K.CONSTRAINT_NAME = C.CONSTRAINT_NAME " +
+                    "AND K.TABLE_NAME = C.TABLE_NAME AND K.OWNER = C.OWNER";
 
     /**
      * 构造函数
@@ -178,7 +212,8 @@ public class DmDataBaseQuery extends AbstractDatabaseQuery {
             if (CollectionUtils.isEmpty(columnsCaching)) {
                 //查询全部
                 if (table.equals(PERCENT_SIGN)) {
-                    PreparedStatement statement = prepareStatement(DM_QUERY_COLUMNS_SQL);
+                    String sql = String.format(DM_QUERY_COLUMNS_SQL.concat(" AND ut.owner = '%s'"), getSchema());
+                    PreparedStatement statement = prepareStatement(sql);
                     resultSet = statement.executeQuery();
                 } else {
                     //查询单表的列信息
@@ -224,7 +259,7 @@ public class DmDataBaseQuery extends AbstractDatabaseQuery {
             //查询
             resultSet = getMetaData().getPrimaryKeys(getSchema(), getSchema(), table);
             //映射
-            return Mapping.convertList(resultSet, DmPrimaryKeyModel.class);
+            return Mapping.convertListByColumnLabel(resultSet, DmPrimaryKeyModel.class);
         } catch (SQLException e) {
             throw ExceptionUtils.mpe(e);
         } finally {
@@ -245,7 +280,7 @@ public class DmDataBaseQuery extends AbstractDatabaseQuery {
             // 由于单条循环查询存在性能问题，所以这里通过自定义SQL查询数据库主键信息
             String sql = String.format(DM_QUERY_PK_SQL, getSchema());
             resultSet = prepareStatement(sql).executeQuery();
-            return Mapping.convertList(resultSet, DmPrimaryKeyModel.class);
+            return Mapping.convertListByColumnLabel(resultSet, DmPrimaryKeyModel.class);
         } catch (SQLException e) {
             throw new QueryException(e);
         } finally {
